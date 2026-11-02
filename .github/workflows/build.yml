@@ -11,6 +11,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Giai nen zip
+        run: unzip -oq donutlike-mod-v3-source.zip
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -20,12 +23,8 @@ jobs:
         with:
           gradle-version: 8.12
 
-      - name: Tim thu muc project
-        id: p
-        run: echo "dir=$(dirname "$(find . -name settings.gradle -not -path './.git/*' | head -1)")" >> $GITHUB_OUTPUT
-
       - name: Build
-        working-directory: ${{ steps.p.outputs.dir }}
+        working-directory: donutlike
         run: gradle build --no-daemon
 
       - name: Upload jar
@@ -33,5 +32,5 @@ jobs:
         with:
           name: donutlike-mod
           path: |
-            ${{ steps.p.outputs.dir }}/build/libs/*.jar
-            !${{ steps.p.outputs.dir }}/build/libs/*-sources.jar
+            donutlike/build/libs/*.jar
+            !donutlike/build/libs/*-sources.jar
